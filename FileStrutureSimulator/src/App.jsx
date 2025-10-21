@@ -2,7 +2,8 @@
 import React from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import FileExplorer from "./components/FileExplorer/FileExplorer.jsx"
+import FileExplorer from "./components/FileExplorer/FileExplorer.jsx";
+import "./App.scss";
 
 function App() {
 

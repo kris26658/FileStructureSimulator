@@ -17,7 +17,6 @@ const blankFolder = {
 
 const blankFile = {
   id: null,
-  
   name: "New File",
   type: "file",
   description: "",

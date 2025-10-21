@@ -1,5 +1,5 @@
 import { useDrag, useDrop } from "react-dnd";
-import useFileStore from "../../store/useFileStore";
+import useFileStore from "./store/useFileStore";
 import { useRef } from "react";
 
 function DraggableFile({ item, onSelect }) {
@@ -34,7 +34,7 @@ function DraggableFile({ item, onSelect }) {
     drag(drop(ref));
 
     return (
-        <li
+        <li className="node"
             ref={ref} // Use the combined ref
             onClick={onSelect}
             style={{
