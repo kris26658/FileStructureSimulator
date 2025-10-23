@@ -8,7 +8,7 @@ function FileExplorer() {
             <h1>File Explorer</h1>
             <Toolbar />
             <br />
-            <div id="fileExplorer" class="folder node"></div>
+            <div id="fileExplorer"></div>
         </>
     );
 }
