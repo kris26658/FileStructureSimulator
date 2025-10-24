@@ -1,14 +1,16 @@
-
+import Sidebar from "../sidebar/Sidebar";
 import Toolbar from "./Toolbar";
 
 function FileExplorer() {
 
-        return (
+    return (
         <>
-            <h1>File Explorer</h1>
-            <Toolbar />
-            <br />
-            <div id="fileExplorer"></div>
+            < Sidebar />
+            <div id="fileExplorer">
+                <h1>File Explorer</h1>
+                <Toolbar />
+                <div id="rootFolder"></div>
+            </div >
         </>
     );
 }

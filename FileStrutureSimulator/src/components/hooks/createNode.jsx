@@ -1,6 +1,6 @@
 function createNode(nodeType) {
-    const fileExplorer = document.getElementById("fileExplorer");
-    const currentNodes = fileExplorer.children.length;
+    const rootFolder = document.getElementById("rootFolder");
+    const currentNodes = rootFolder.children.length;
     const newId = currentNodes + 1;
 
     // Helper function to create and configure a new node
@@ -16,20 +16,19 @@ function createNode(nodeType) {
             event.dataTransfer.setData("text/plain", node.id);
             event.dataTransfer.effectAllowed = "move";
         });
-
         return node;
     };
 
     const newNode = createNewNode(newId, nodeType);
 
-    // Add a single dragover and drop listener to the fileExplorer
-    if (!fileExplorer.dataset.listenersAdded) {
-        fileExplorer.addEventListener("dragover", (event) => {
+    // Add a single dragover and drop listener to the rootFolder
+    if (!rootFolder.dataset.listenersAdded) {
+        rootFolder.addEventListener("dragover", (event) => {
             event.preventDefault();
             event.dataTransfer.dropEffect = "move";
         });
 
-        fileExplorer.addEventListener("drop", (event) => {
+        rootFolder.addEventListener("drop", (event) => {
             event.preventDefault();
             const draggedNode = document.getElementById(event.dataTransfer.getData("text/plain"));
             const dropTarget = event.target;
@@ -42,21 +41,52 @@ function createNode(nodeType) {
                 }
             }
         });
-        fileExplorer.addEventListener("click", (event) => {
+
+
+        let clickTimeout;
+        rootFolder.addEventListener("click", (event) => {
             const clickedElement = event.target;
-        
-            // Check if the clicked element is a folder
-            if (clickedElement.classList.contains("folder")) {
-                clickedElement.classList.toggle("open");
-                
+
+            // Clear the timeout if it's a double-click
+            if (clickTimeout) {
+                clearTimeout(clickTimeout);
+                clickTimeout = null;
+                return;
+            }
+
+            // Set a timeout to handle single-click logic
+            clickTimeout = setTimeout(() => {
+                clickTimeout = null;
+
+                // Check if the clicked element is a folder
+                if (clickedElement.classList.contains("folder")) {
+                    clickedElement.classList.toggle("open");
+                }
+            }, 250); // Adjust the delay as needed (250ms is a common threshold)
+        });
+
+        // Add double-click event listener
+        rootFolder.addEventListener("dblclick", (event) => {
+            const clickedElement = event.target;
+
+            // Ensure the clicked element is not a child
+            if (clickedElement.classList.contains("node")) {
+                const currentName = clickedElement.innerText;
+
+                // prompt for a new name
+                const newName = prompt("Enter new name:", currentName);
+                if (newName !== null && newName.trim() !== "") {
+                    clickedElement.innerText = newName.trim();
+                }
+
             }
         });
 
-        fileExplorer.dataset.listenersAdded = true; // Mark listeners as added
+        rootFolder.dataset.listenersAdded = true; // Mark listeners as added
     }
 
-    // Append the new node to fileExplorer
-    fileExplorer.appendChild(newNode);
+    // Append the new node to rootFolder
+    rootFolder.appendChild(newNode);
 }
 
 export default createNode;

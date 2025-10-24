@@ -1,27 +1,73 @@
 body {
-    height: 90vh;
-    padding: 5vh;
+    padding: 0;
     margin: 0;
     font-family: Arial, sans-serif;
     background-color: #101024;
     color: #ffffff;
 }
 
-#fileExplorer {
-    width: 60vw;
-    height: 70vh;
+h1, h2, h3, h4, h5, h6 {
+    padding: 0;
+    margin: 0;
+}
+
+.toolbar {
+    width: 100%;
+    height: 6vh;
+    display: flex;
+    align-items: center;
+    padding: 1vh;
+    box-sizing: border-box;
     border: 1px solid #333366;
-    border-radius: 5px;
     background-color: #151530;
-    padding: px;
+}
+
+button, select, option {
+    height: 2vh;
+    background-color: #333366;
+    color: #ffffff;
+    border: none;
+    padding: 1vh;
+    box-sizing: content-box;
+    cursor: pointer;
+}
+button:hover, select:hover, option:hover {
+    background-color: #444477;
+}
+
+#fileExplorer {
+    margin: auto;
+    margin-top: 2%;
+    width: 100vh;
+    height: 80vh;
+    align-items: center;
+}
+
+#rootFolder {
+    height: 100%;
+    border: 1px solid #333366;
+    background-color: #151530;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    padding: 1%;
+    height: 100%;
+    width: 10%;
+    background-color: #323242;
 }
 
 .node {
-    display: list-item;
     background-color: #1b1c46;
     margin: 10px;
     padding: 10px;
     border-radius: 5px;
+}
+
+.node:before {
+    margin-right: 10px;
+    display: inline;
 }
 
 .node:hover {
@@ -30,22 +76,25 @@ body {
 }
 
 .folder {
-    list-style: "📁";
+    justify-content: center;
 }
 
+.folder:before {
+    content: "📁";
+}
 
 .folder > * {
     display: none;
 }
 
-.folder.open {
-    list-style: "📂";
+.folder.open:before {
+    content: "📂";
 }
 
 .folder.open > * {
-    display: list-item; /* Show child nodes when the folder has the 'open' class */
+    display: block;
 }
 
-.file {
-    list-style: "📄";
+.file:before {
+    content: "📄";
 }
