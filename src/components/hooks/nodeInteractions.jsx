@@ -1,27 +1,20 @@
 import { getNodeLabel } from "./nodeFactory";
 
-function updateFolderChildCount(folder) {
-    if (!folder || !folder.classList?.contains("folder")) {
-        return;
-    }
+function updateFolderCounter(folder) {
+    const counter = folder?.querySelector(":scope > .childCount");
 
-    const counter = folder.querySelector(":scope > .childCount");
-    if (!counter) {
-        return;
+    if (counter) {
+        // Count all descendants so parent folders reflect nested changes.
+        counter.innerText = folder.querySelectorAll(":scope .node").length;
     }
-
-    counter.innerText = folder.querySelectorAll(":scope > .node").length;
 }
 
-function updateAncestorFolderCounts(startElement, rootFolder) {
-    let current = startElement;
+function updateFolderAndParents(folder) {
+    let currentFolder = folder;
 
-    while (current && current !== rootFolder) {
-        if (current.classList?.contains("folder")) {
-            updateFolderChildCount(current);
-        }
-
-        current = current.parentElement?.closest?.(".folder") ?? null;
+    while (currentFolder?.classList?.contains("folder")) {
+        updateFolderCounter(currentFolder);
+        currentFolder = currentFolder.parentElement?.closest?.(".folder");
     }
 }
 
@@ -40,22 +33,22 @@ function attachNodeInteractions(rootFolder) {
         const draggedNode = document.getElementById(event.dataTransfer.getData("text/plain"));
         const dropTarget = event.target;
         const targetFolder = dropTarget.closest?.(".folder");
-        const sourceParentFolder = draggedNode?.parentElement?.closest?.(".folder") ?? null;
+        const sourceFolder = draggedNode?.parentElement?.closest?.(".folder");
 
         //allow dropping into folders or back to root.
         if (draggedNode && draggedNode !== targetFolder) {
             if (targetFolder && targetFolder !== draggedNode) {
                 targetFolder.classList.add("open");
                 targetFolder.appendChild(draggedNode);
-
-                // Update destination folder and all its ancestors.
-                updateAncestorFolderCounts(targetFolder, rootFolder);
+                updateFolderAndParents(targetFolder);
             } else {
                 rootFolder.appendChild(draggedNode);
             }
 
-            // Update source folder and all its ancestors after the move.
-            updateAncestorFolderCounts(sourceParentFolder, rootFolder);
+            //source folder and its parents may lose descendants after a move.
+            if (sourceFolder && sourceFolder !== targetFolder) {
+                updateFolderAndParents(sourceFolder);
+            }
         }
     });
 
